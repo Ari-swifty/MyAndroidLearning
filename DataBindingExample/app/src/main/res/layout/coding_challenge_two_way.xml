@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="myViewModel"
+            type="com.arigarasuthan.databindingapp.TwoWayViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <EditText
+            android:id="@+id/input_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="@={myViewModel.inputText}"
+            android:inputType="number"/>
+        <Button
+            android:id="@+id/click_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/input_text"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="Add"
+            android:layout_marginTop="10dp"
+            android:onClick="@{()->myViewModel.updateData()}"/>
+        <TextView
+            android:id="@+id/output_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/click_button"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="40sp"
+            android:text="@{String.valueOf(myViewModel.addData)}"
+            android:layout_marginTop="30dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
