@@ -13,16 +13,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModelFactory: MainActivityViewModelFactory
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         viewModelFactory = MainActivityViewModelFactory(100)
-        viewModel = ViewModelProvider(this,viewModelFactory)[MainActivityViewModel::class.java]
-        viewModel.countTotalData.observe(this, Observer {
-            binding.countText.text = "$it"
-        })
-        binding.apply {
-             countButton.setOnClickListener {
-                 viewModel.getUpdatedCount()
-            }
-        }
+        viewModel = ViewModelProvider(this, viewModelFactory)[MainActivityViewModel::class.java]
+        binding.lifecycleOwner = this
+        binding.myviewModel = viewModel
     }
 }
