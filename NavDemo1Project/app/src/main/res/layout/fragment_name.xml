@@ -6,7 +6,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NameFragment">
+    tools:context=".codingchallenge.NameFragment">
     <EditText
         android:id="@+id/cc_name_edittext"
         android:layout_width="match_parent"

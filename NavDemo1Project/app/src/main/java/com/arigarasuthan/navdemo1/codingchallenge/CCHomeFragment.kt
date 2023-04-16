@@ -1,18 +1,14 @@
-package com.arigarasuthan.navdemo1
+package com.arigarasuthan.navdemo1.codingchallenge
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import com.arigarasuthan.navdemo1.R
 import com.arigarasuthan.navdemo1.databinding.FragmentCcHomeBinding
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
@@ -20,7 +16,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class CCHomeFragment : Fragment() {
-    private lateinit var binding:FragmentCcHomeBinding
+    private lateinit var binding: FragmentCcHomeBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -30,7 +26,7 @@ class CCHomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_cc_home, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_cc_home, container, false)
         binding.apply {
             ccHomeSignup.setOnClickListener { view->
                 view.findNavController().navigate(R.id.action_CCHomeFragment_to_nameFragment)

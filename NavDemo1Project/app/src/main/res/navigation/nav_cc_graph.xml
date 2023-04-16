@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/CCHomeFragment"
-        android:name="com.arigarasuthan.navdemo1.CCHomeFragment"
+        android:name="com.arigarasuthan.navdemo1.codingchallenge.CCHomeFragment"
         android:label="fragment_cc_home"
         tools:layout="@layout/fragment_cc_home" >
         <action
@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/nameFragment"
-        android:name="com.arigarasuthan.navdemo1.NameFragment"
+        android:name="com.arigarasuthan.navdemo1.codingchallenge.NameFragment"
         android:label="fragment_name"
         tools:layout="@layout/fragment_name" >
         <action
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/emailFragment"
-        android:name="com.arigarasuthan.navdemo1.EmailFragment"
+        android:name="com.arigarasuthan.navdemo1.codingchallenge.EmailFragment"
         android:label="fragment_email"
         tools:layout="@layout/fragment_email" >
         <action
@@ -53,12 +53,12 @@
     </fragment>
     <fragment
         android:id="@+id/termsAndConditionsFragment"
-        android:name="com.arigarasuthan.navdemo1.TermsAndConditionsFragment"
+        android:name="com.arigarasuthan.navdemo1.codingchallenge.TermsAndConditionsFragment"
         android:label="fragment_terms_and_conditions"
         tools:layout="@layout/fragment_terms_and_conditions" />
     <fragment
         android:id="@+id/dashboardFragment"
-        android:name="com.arigarasuthan.navdemo1.DashboardFragment"
+        android:name="com.arigarasuthan.navdemo1.codingchallenge.DashboardFragment"
         android:label="fragment_dashboard"
         tools:layout="@layout/fragment_dashboard" >
         <action
