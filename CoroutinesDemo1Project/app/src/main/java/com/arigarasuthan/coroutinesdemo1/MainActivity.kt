@@ -8,6 +8,7 @@ import com.arigarasuthan.coroutinesdemo1.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
     private var count = 0
@@ -20,17 +21,20 @@ class MainActivity : AppCompatActivity() {
                 tvCount.text = count++.toString()
             }
             downloadUserData.setOnClickListener {
-                CoroutineScope(Dispatchers.IO).launch {
-                    downloadUserDataValue()
+                CoroutineScope(Dispatchers.Main).launch {
+                    //tvMessage.text = UserDataManager().getTotalUserCount().toString()
+                    tvMessage.text = UserDataManager2().getTotalUserCount().toString()
                 }
             }
         }
     }
 
-    private fun downloadUserDataValue() {
+    private suspend fun downloadUserDataValue() {
         for(i in 1..200000)
         {
-            Log.i("MyTag","Downloading user $i in ${Thread.currentThread().name}")
+            withContext(Dispatchers.Main){
+                binding.tvMessage.text = "Downloading user $i in ${Thread.currentThread().name}"
+            }
         }
     }
 }
