@@ -15,6 +15,7 @@ import com.arigarasuthan.roomdemoapp.db.SubscriberDataBase
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var subscriberViewModel: SubscriberViewModel
+    private lateinit var adapter: MyRecyclerViewAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -25,23 +26,30 @@ class MainActivity : AppCompatActivity() {
         binding.myViewModel = subscriberViewModel
         binding.lifecycleOwner = this
         initRecyclerView()
+        subscriberViewModel.message.observe(this){
+            it.getContentIfNotHandled()?.let { msg->
+                Toast.makeText(this,msg,Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     private fun initRecyclerView() {
         binding.subscriberList.layoutManager = LinearLayoutManager(this)
+        adapter = MyRecyclerViewAdapter {selectedItem: Subscriber -> listItemClicked(selectedItem)  }
+        binding.subscriberList.adapter = adapter
         displaySubscriberList()
     }
 
     private fun displaySubscriberList() {
         subscriberViewModel.subscribers.observe(this) { subscribersList ->
             Log.d("MyTag", subscribersList.toString())
-            binding.subscriberList.adapter = MyRecyclerViewAdapter(
-                subscribersList
-            ) { selectedItem: Subscriber -> listItemClicked(selectedItem) }
+            adapter.setList(subscribersList)
+            adapter.notifyDataSetChanged()
         }
     }
 
     private fun listItemClicked(subscriber: Subscriber) {
-        Toast.makeText(this, "Selected Name Is ${subscriber.name}", Toast.LENGTH_LONG).show()
+        subscriberViewModel.initUpdateAndDelete(subscriber)
+        //Toast.makeText(this, "Selected Name Is ${subscriber.name}", Toast.LENGTH_LONG).show()
     }
 }
