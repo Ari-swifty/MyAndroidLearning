@@ -32,6 +32,16 @@
             android:layout_marginTop="20dp"
             android:hint="Student Email"
             android:text="@={myViewModel.studentEmail}"/>
+        <EditText
+            android:id="@+id/course_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/email_edittext"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="20dp"
+            android:hint="Course"
+            android:text="@={myViewModel.courseName}"/>
 
         <Button
             android:id="@+id/submit_button"
@@ -39,7 +49,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/email_edittext"
+            app:layout_constraintTop_toBottomOf="@+id/course_edittext"
             android:text="Submit"
             android:onClick="@{()->myViewModel.submit()}"/>
     </androidx.constraintlayout.widget.ConstraintLayout>

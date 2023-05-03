@@ -11,11 +11,13 @@ import kotlinx.coroutines.launch
 class StudentViewModel(private val studentRepo: StudentRepo) : ViewModel() {
     val studentName = MutableLiveData<String>()
     val studentEmail = MutableLiveData<String>()
+    val courseName = MutableLiveData<String>()
 
     fun submit() {
-        inserStudent(Student(0, studentName.value ?: "",studentEmail.value ?: ""))
+        inserStudent(Student(0, studentName.value ?: "",studentEmail.value ?: "",courseName.value ?: ""))
         studentName.value = ""
         studentEmail.value = ""
+        courseName.value = ""
     }
 
     private fun inserStudent(student: Student) = viewModelScope.launch(Dispatchers.IO) {
