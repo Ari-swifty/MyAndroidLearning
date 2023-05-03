@@ -14,7 +14,7 @@ class StudentViewModel(private val studentRepo: StudentRepo) : ViewModel() {
     val courseName = MutableLiveData<String>()
 
     fun submit() {
-        inserStudent(Student(0, studentName.value ?: "",studentEmail.value ?: "",courseName.value ?: ""))
+        inserStudent(Student(0, studentName.value ?: "", courseName.value ?: ""))
         studentName.value = ""
         studentEmail.value = ""
         courseName.value = ""
@@ -22,7 +22,7 @@ class StudentViewModel(private val studentRepo: StudentRepo) : ViewModel() {
 
     private fun inserStudent(student: Student) = viewModelScope.launch(Dispatchers.IO) {
         val rowId = studentRepo.insert(student)
-        Log.d("StudentNameValue","$rowId")
+        Log.d("StudentNameValue", "$rowId")
 
     }
 }

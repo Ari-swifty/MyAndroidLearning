@@ -12,9 +12,7 @@ data class Student(
     var id:Int,
     @ColumnInfo(name = "student_name")
     var name: String,
-    @ColumnInfo(name = "student_email", defaultValue = "No Email")
-    var email: String,
-    @ColumnInfo(name = "course_name")
+    @ColumnInfo(name = "subject_name")
     var course: String?
 
 )

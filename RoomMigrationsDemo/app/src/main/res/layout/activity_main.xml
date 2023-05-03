@@ -31,7 +31,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="20dp"
             android:hint="Student Email"
-            android:text="@={myViewModel.studentEmail}"/>
+            android:text="@={myViewModel.studentEmail}"
+            android:visibility="gone"/>
         <EditText
             android:id="@+id/course_edittext"
             android:layout_width="match_parent"
