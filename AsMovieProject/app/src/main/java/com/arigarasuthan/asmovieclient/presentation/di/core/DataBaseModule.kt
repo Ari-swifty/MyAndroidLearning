@@ -1,4 +1,4 @@
-package com.arigarasuthan.asmovieclient.presentation.di
+package com.arigarasuthan.asmovieclient.presentation.di.core
 
 import android.content.Context
 import androidx.room.Room

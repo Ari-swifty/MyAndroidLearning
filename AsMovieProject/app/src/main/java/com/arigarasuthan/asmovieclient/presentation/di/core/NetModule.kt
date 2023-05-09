@@ -1,11 +1,10 @@
-package com.arigarasuthan.asmovieclient.presentation.di
+package com.arigarasuthan.asmovieclient.presentation.di.core
 
 import com.arigarasuthan.asmovieclient.api.TMTBService
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import javax.inject.Singleton
 
 @Module

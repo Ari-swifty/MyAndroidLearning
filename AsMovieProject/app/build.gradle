@@ -18,6 +18,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String","API_KEY","\"051fc3fc7eb82e540b8e2c5ef852cf80\""
+        buildConfigField "String","BASE_URL","\"https://api.themoviedb.org/3/\""
     }
 
     buildTypes {
@@ -72,9 +73,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version")
 
     //Dagger
-    def dagger_version = "2.46"
+    def dagger_version = "2.42"
     implementation "com.google.dagger:dagger:$dagger_version"
-    annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
 
 
     //Retrofit
