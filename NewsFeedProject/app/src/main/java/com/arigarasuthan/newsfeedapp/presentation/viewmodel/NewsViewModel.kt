@@ -7,18 +7,27 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.arigarasuthan.newsfeedapp.data.model.APIResponse
+import com.arigarasuthan.newsfeedapp.data.model.Article
 import com.arigarasuthan.newsfeedapp.data.util.Resource
-import com.arigarasuthan.newsfeedapp.domain.usecases.GetNewsHeadlinesUseCase
+import com.arigarasuthan.newsfeedapp.domain.usecases.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class NewsViewModel(private val app:Application, private val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase) : AndroidViewModel(app) {
-    val newsHeadlines:MutableLiveData<Resource<APIResponse>> = MutableLiveData()
+class NewsViewModel(
+    private val app: Application,
+    private val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
+    private val getSearchedNewsUseCase: GetSearchedNewsUseCase,
+    private val saveNewsUseCase: SaveNewsUseCase,
+    private val getSavedNewsUseCase: GetSavedNewsUseCase,
+    private val deleteSavedNewsUseCase: DeleteSavedNewsUseCase
+) : AndroidViewModel(app) {
+    val newsHeadlines: MutableLiveData<Resource<APIResponse>> = MutableLiveData()
 
-    fun getNewsHeadlines(country:String,page:Int) = viewModelScope.launch(Dispatchers.IO) {
+    fun getNewsHeadlines(country: String, page: Int) = viewModelScope.launch(Dispatchers.IO) {
         newsHeadlines.postValue(Resource.Loading())
         try {
             if (isInternetAvailable(app)) {
@@ -27,7 +36,7 @@ class NewsViewModel(private val app:Application, private val getNewsHeadlinesUse
             } else {
                 newsHeadlines.postValue(Resource.Error("Internet is not available"))
             }
-        } catch (e:java.lang.Exception) {
+        } catch (e: java.lang.Exception) {
             newsHeadlines.postValue(Resource.Error(e.message.toString()))
         }
     }
@@ -59,5 +68,40 @@ class NewsViewModel(private val app:Application, private val getNewsHeadlinesUse
             }
         }
         return result
+    }
+
+    //Search news
+    val searchNews: MutableLiveData<Resource<APIResponse>> = MutableLiveData()
+
+    fun searchNews(country: String, searchQuery: String, page: Int) =
+        viewModelScope.launch(Dispatchers.IO) {
+            searchNews.postValue(Resource.Loading())
+            try {
+                if (isInternetAvailable(app)) {
+                    val response = getSearchedNewsUseCase.execute(country, searchQuery, page)
+                    searchNews.postValue(response)
+                } else {
+                    searchNews.postValue(Resource.Error("No Connection"))
+                }
+            } catch (e: java.lang.Exception) {
+                searchNews.postValue(Resource.Error("Something went wrong"))
+            }
+        }
+
+    //Local DataBase:Save News
+    fun saveNewsToDB(article: Article) = viewModelScope.launch(Dispatchers.IO) {
+        saveNewsUseCase.execute(article)
+    }
+
+    //Local DataBase:Get Saved News
+    fun getSavedNews() = liveData {
+        getSavedNewsUseCase.execute().collect {
+            emit(it)
+        }
+    }
+
+    //Local DataBase:Delete News
+    fun deleteArticles(article: Article) = viewModelScope.launch(Dispatchers.IO) {
+        deleteSavedNewsUseCase.execute(article)
     }
 }

@@ -1,6 +1,7 @@
 package com.arigarasuthan.newsfeedapp.presentation.di
 
 import com.arigarasuthan.newsfeedapp.data.repo.NewsRepoImpl
+import com.arigarasuthan.newsfeedapp.data.repo.datasource.NewsLocalDataSource
 import com.arigarasuthan.newsfeedapp.data.repo.datasource.NewsRemoteDataSource
 import com.arigarasuthan.newsfeedapp.domain.repos.NewsRepo
 import dagger.Module
@@ -15,5 +16,5 @@ class RepoModule {
 
     @Singleton
     @Provides
-    fun providesNewsRepo(newsRemoteDataSource: NewsRemoteDataSource) : NewsRepo = NewsRepoImpl(newsRemoteDataSource)
+    fun providesNewsRepo(newsRemoteDataSource: NewsRemoteDataSource,newsLocalDataSource: NewsLocalDataSource) : NewsRepo = NewsRepoImpl(newsRemoteDataSource,newsLocalDataSource)
 }

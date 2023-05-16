@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
+import android.widget.SearchView
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arigarasuthan.newsfeedapp.data.model.Article
@@ -15,6 +17,9 @@ import com.arigarasuthan.newsfeedapp.data.util.Resource
 import com.arigarasuthan.newsfeedapp.databinding.FragmentNewsBinding
 import com.arigarasuthan.newsfeedapp.presentation.adapter.NewsAdapter
 import com.arigarasuthan.newsfeedapp.presentation.viewmodel.NewsViewModel
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class NewsFragment : Fragment() {
@@ -40,8 +45,15 @@ class NewsFragment : Fragment() {
         binding = FragmentNewsBinding.bind(view)
         newsViewModel = (activity as MainActivity).newsViewModel
         adapter = (activity as MainActivity).newsAdapter
+        adapter.setOnItemClickListener {
+            val bundle = Bundle().apply {
+                putSerializable("selected_article", it)
+            }
+            findNavController().navigate(R.id.action_newsFragment_to_infoFragment, bundle)
+        }
         initRecyclerView()
         viewNewsList()
+        setSearchView()
     }
 
     private fun viewNewsList() {
@@ -52,11 +64,11 @@ class NewsFragment : Fragment() {
                     hideLoading()
                     response.data?.let { apiResponse ->
                         adapter.differ.submitList(apiResponse.articles.toList())
-                        Log.d("MyTResults","${apiResponse.totalResults}")
+                        Log.d("MyTResults", "${apiResponse.totalResults}")
                         pages = if (apiResponse.totalResults % 20 == 0) {
                             apiResponse.totalResults / 20
                         } else {
-                            apiResponse.totalResults/20+1
+                            apiResponse.totalResults / 20 + 1
                         }
                         isLastPage = page == pages
                     }
@@ -72,6 +84,66 @@ class NewsFragment : Fragment() {
                 }
             }
         }
+    }
+
+    //Search
+    private fun setSearchView() {
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                newsViewModel.searchNews("us",p0.toString(),page)
+                viewSearchedNews()
+                return false
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                MainScope().launch {
+                    delay(2000)
+                    newsViewModel.searchNews("us",p0.toString(),page)
+                    viewSearchedNews()
+                }
+                return false
+            }
+
+        })
+
+        binding.searchView.setOnCloseListener(object :SearchView.OnCloseListener {
+            override fun onClose(): Boolean {
+                initRecyclerView()
+                viewNewsList()
+                return false
+            }
+
+        })
+    }
+
+    private fun viewSearchedNews() {
+        newsViewModel.searchNews.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is Resource.Success -> {
+                    hideLoading()
+                    response.data?.let { apiResponse ->
+                        adapter.differ.submitList(apiResponse.articles.toList())
+                        Log.d("MyTResults", "${apiResponse.totalResults}")
+                        pages = if (apiResponse.totalResults % 20 == 0) {
+                            apiResponse.totalResults / 20
+                        } else {
+                            apiResponse.totalResults / 20 + 1
+                        }
+                        isLastPage = page == pages
+                    }
+                }
+                is Resource.Error -> {
+                    hideLoading()
+                    response.message?.let { msg ->
+                        Toast.makeText(activity, msg, Toast.LENGTH_LONG).show()
+                    }
+                }
+                is Resource.Loading -> {
+                    showLoading()
+                }
+            }
+        }
+
     }
 
     private fun initRecyclerView() {
@@ -109,14 +181,12 @@ class NewsFragment : Fragment() {
 
             val hasReachedToEnd = topPosition + visibleItems >= sizeOfTheCurrentList
             val shouldPaginate = !isLoading && !isLastPage && !hasReachedToEnd && isScrolling
-            if(shouldPaginate)
-            {
+            if (shouldPaginate) {
                 page++
-                newsViewModel.getNewsHeadlines(country,page)
+                newsViewModel.getNewsHeadlines(country, page)
                 isScrolling = false
             }
         }
     }
 
-    private var onItemClickListener:((Article)->Unit)?=null
 }

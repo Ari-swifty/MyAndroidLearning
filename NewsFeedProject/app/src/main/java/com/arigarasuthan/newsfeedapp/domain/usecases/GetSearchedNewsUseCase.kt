@@ -5,5 +5,5 @@ import com.arigarasuthan.newsfeedapp.data.util.Resource
 import com.arigarasuthan.newsfeedapp.domain.repos.NewsRepo
 
 class GetSearchedNewsUseCase(private val newsRepo: NewsRepo) {
-    suspend fun execute(searchQuery:String):Resource<APIResponse> = newsRepo.getSearchedNews(searchQuery)
+    suspend fun execute(country:String,searchQuery:String,page:Int):Resource<APIResponse> = newsRepo.getSearchedNews(country,searchQuery,page)
 }
