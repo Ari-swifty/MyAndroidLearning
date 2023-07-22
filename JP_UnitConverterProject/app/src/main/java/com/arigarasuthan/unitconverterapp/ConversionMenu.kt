@@ -15,9 +15,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
+import com.arigarasuthan.unitconverterapp.data.Conversion
 
 @Composable
-fun ConversionMenu(list: List<Conversion>, modifier: Modifier = Modifier,convert:(Conversion)->Unit ) {
+fun ConversionMenu(
+    isLandScape: Boolean,
+    list: List<Conversion>,
+    modifier: Modifier = Modifier, convert: (Conversion) -> Unit
+) {
     var displayingText by remember { mutableStateOf("Select the conversion type") }
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
     var expanded by remember {
@@ -28,28 +33,48 @@ fun ConversionMenu(list: List<Conversion>, modifier: Modifier = Modifier,convert
         Icons.Filled.KeyboardArrowUp
     else
         Icons.Filled.KeyboardArrowDown
-    Column() {
-        OutlinedTextField(
-            value = displayingText,
-            onValueChange ={displayingText = it},
-            textStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold),
-            modifier = modifier
-                .fillMaxWidth()
-                .onGloballyPositioned { coordinates ->
-                    textFieldSize = coordinates.size.toSize()
+    Column {
+        if(isLandScape) {
+            OutlinedTextField(
+                value = displayingText,
+                onValueChange = { displayingText = it },
+                textStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold),
+                modifier = modifier
+                    .onGloballyPositioned { coordinates ->
+                        textFieldSize = coordinates.size.toSize()
+                    },
+                label = { Text(text = "Conversion Type") },
+                trailingIcon = {
+                    Icon(icon, contentDescription = "icon",
+                        modifier.clickable {
+                            expanded = !expanded
+                        })
                 },
-            label = { Text(text = "Conversion Type")},
-            trailingIcon = {
-                Icon(icon, contentDescription = "icon",
-                    modifier.clickable {
-                        expanded = !expanded
-                    })
-            },
-            readOnly = true
-        )
+                readOnly = true
+            )
 
+        } else {
+            OutlinedTextField(
+                value = displayingText,
+                onValueChange = { displayingText = it },
+                textStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold),
+                modifier = modifier
+                    .fillMaxWidth()
+                    .onGloballyPositioned { coordinates ->
+                        textFieldSize = coordinates.size.toSize()
+                    },
+                label = { Text(text = "Conversion Type") },
+                trailingIcon = {
+                    Icon(icon, contentDescription = "icon",
+                        modifier.clickable {
+                            expanded = !expanded
+                        })
+                },
+                readOnly = true
+            )
+        }
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            list.forEach {conversion->
+            list.forEach { conversion ->
                 DropdownMenuItem(onClick = {
                     displayingText = conversion.description
                     expanded = false
@@ -63,6 +88,8 @@ fun ConversionMenu(list: List<Conversion>, modifier: Modifier = Modifier,convert
                 }
             }
         }
+
+
     }
 
 }
